@@ -14,6 +14,7 @@ curl -X POST -H "Content-Type: application/json" 'http://127.0.0.1:9998/jsonrpc'
 
 {"jsonrpc":"2.0","id":1,"error":{"code":-32601,"message":"Unknown method."}}
 
+Thunder R4.4.3 Testing Results:
 
 curl -X POST -H "Content-Type: application/json" 'http://127.0.0.1:9998/jsonrpc' -d '{"jsonrpc":"2.0","id":1,"method":"HelloPlugin.1.SayHello","params":{"name":"Thamim"}}' ; echo
 
