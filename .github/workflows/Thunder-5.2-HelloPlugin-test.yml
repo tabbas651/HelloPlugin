@@ -1,4 +1,4 @@
-name: HelloPlugin-test
+name: Thunder-5.2-HelloPlugin-test
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
   workflow_dispatch:   # manual trigger
 
 env:
-  THUNDER_REF: "R5_3"
+  THUNDER_REF: "R5.2.0"
 
 jobs:
-  L1-tests:
+  HelloPlugin-test:
     name: Build and run unit tests
     runs-on: ubuntu-22.04
 
@@ -77,8 +77,8 @@ jobs:
           -DBUILD_TYPE=Debug
           -DBINDING=127.0.0.1
           -DPORT=9998
-          -DTRACING=OFF 
-          -DMESSAGING=ON  
+          -DTRACING=OFF
+          -DMESSAGING=ON
           -DENABLED_TRACING_LEVEL=2
           &&
           cmake --build build/Thunder --target install -j8
@@ -93,4 +93,3 @@ jobs:
           -DCMAKE_MODULE_PATH="${{github.workspace}}/install/tools/cmake"
           &&
           cmake --build build/HelloPlugin --target install -j8
-
