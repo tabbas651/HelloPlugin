@@ -1,4 +1,4 @@
-name: Thunder-HelloPlugin-test
+name: Thunder-5.3-HelloPlugin-test
 
 on:
   push:
@@ -11,7 +11,7 @@ env:
   THUNDER_REF: "R5_3"
 
 jobs:
-  HelloPlugin-tests:
+  HelloPlugin-test:
     name: Build and run unit tests
     runs-on: ubuntu-22.04
 
@@ -27,7 +27,7 @@ jobs:
             install
             !install/etc/thunder/plugins
             !install/usr/lib/thunder/plugins
-          key: thunder-${{ env.THUNDER_REF }}-rdk
+          key: thunder-${{ env.THUNDER_REF }}
 
       - name: Install packages
         run: |
@@ -93,3 +93,31 @@ jobs:
           -DCMAKE_MODULE_PATH="${{github.workspace}}/install/tools/cmake"
           &&
           cmake --build build/HelloPlugin --target install -j8
+
+      - name: Set environment variables
+        run: |
+          echo "THUNDER_INSTALL_DIR=${{ github.workspace }}/install" >> $GITHUB_ENV
+          echo "PATH=${{ github.workspace }}/install/usr/bin:$PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${{ github.workspace }}/install/usr/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+      - name: Run Thunder and test HelloPlugin
+        run: |
+          # File to capture Thunder logs
+          THUNDER_LOG="${{ github.workspace }}/thunder.log"
+
+          # Start Thunder in the background
+          Thunder -c ${{ github.workspace }}/install/usr/etc/Thunder/config.json > "$THUNDER_LOG" 2>&1 &
+          THUNDER_PID=$!
+
+          # Wait for Thunder to initialize
+          sleep 5
+
+          # Send JSON-RPC request to HelloPlugin
+          curl -X POST -H "Content-Type: application/json" \
+            'http://127.0.0.1:9998/jsonrpc' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"HelloPlugin.1.SayHello","params":{"name":"Thamim"}}'
+
+          echo
+
+          # Stop Thunder after test
+          kill $THUNDER_PID
