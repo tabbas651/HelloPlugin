@@ -58,7 +58,7 @@ namespace Thunder
             }
             
 	    //Build QueryInterface implementation, specifying all possible interfaces to be returned.
-            BEGIN_INTERFACE_MAP(TestPlugin)
+            BEGIN_INTERFACE_MAP(HelloPlugin)
             INTERFACE_ENTRY(PluginHost::IPlugin)
             INTERFACE_ENTRY(PluginHost::IDispatcher)
             END_INTERFACE_MAP
