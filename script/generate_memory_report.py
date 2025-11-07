@@ -2,6 +2,7 @@
 import subprocess
 from datetime import datetime
 import os
+import zipfile
 
 def get_memory_info(pid):
     info = {"RssAnon": 0, "RssFile": 0, "RssShmem": 0, "TotalRSS": 0, "TotalPSS": 0}
@@ -31,7 +32,7 @@ def get_memory_info(pid):
     return info
 
 def generate_html_report(process_data):
-    time_str = datetime.utcnow().strftime("%a %b %d %H:%M:%S UTC %Y")
+    time_str = datetime.now().strftime("%a %b %d %H:%M:%S %Z %Y")
 
     html = f"""<html>
 <head>
@@ -86,10 +87,17 @@ def main():
     html = generate_html_report(processes)
     os.makedirs("artifacts", exist_ok=True)
     output_file = "artifacts/thunder_memory_summary.html"
+
+    # Write the HTML file
     with open(output_file, "w") as f:
         f.write(html)
 
-    print(f"✅ Memory report generated: {output_file}")
+    # ✅ Create a zip file containing the report
+    zip_path = "artifacts/Thunder-Memory-Report.zip"
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+        zipf.write(output_file, arcname="thunder_memory_summary.html")
+
+    print(f"✅ Memory report generated and zipped: {zip_path}")
 
 if __name__ == "__main__":
     main()
