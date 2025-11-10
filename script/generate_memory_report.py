@@ -69,21 +69,48 @@ th {{ background-color: #2b3e50; color: white; }}
 def main():
 
     processes = []
-    result = subprocess.run(["pgrep", "-af", "Thunder"], capture_output=True, text=True)
+    # Check if WPEFramework is running first
+    print("Searching for WPEFramework processes...")
+    result = subprocess.run(["pgrep", "-af", "WPEFramework"], capture_output=True, text=True)
+    wpe_found = False
     for line in result.stdout.strip().split("\n"):
         if line:
             parts = line.split(None, 1)
             pid = parts[0]
-            pname = "Thunder"
+            pname = "WPEFramework"
             meminfo = get_memory_info(pid)
             if meminfo:
                 meminfo["pid"] = pid
                 meminfo["name"] = pname
                 processes.append(meminfo)
+                wpe_found = True
+                print(f"Found WPEFramework process: PID {pid}")
+    # Only check Thunder if WPEFramework is not running
+    if not wpe_found:
+        print("No WPEFramework processes found. Searching for Thunder processes...")
+        result = subprocess.run(["pgrep", "-af", "Thunder"], capture_output=True, text=True)
+        thunder_found = False
+        for line in result.stdout.strip().split("\n"):
+            if line:
+                parts = line.split(None, 1)
+                pid = parts[0]
+                pname = "Thunder"
+                meminfo = get_memory_info(pid)
+                if meminfo:
+                    meminfo["pid"] = pid
+                    meminfo["name"] = pname
+                    processes.append(meminfo)
+                    thunder_found = True
+                    print(f"Found Thunder process: PID {pid}")
+        if not thunder_found:
+            print("No Thunder processes found either.")
+    else:
+        print(f"WPEFramework is running. Skipping Thunder process search.")
+        print(f"Total WPEFramework processes found: {len(processes)}")
 
+    # Generate HTML report accordingly
     if not processes:
-        print("No Thunder process found.")
-        return
+        print("No processes found to analyze. Generating empty report.")
 
     html = generate_html_report(processes)
     os.makedirs("artifacts", exist_ok=True)
