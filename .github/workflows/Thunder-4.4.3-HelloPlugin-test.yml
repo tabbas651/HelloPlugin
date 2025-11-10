@@ -127,9 +127,7 @@ jobs:
           REPORT_FILE="$REPORT_DIR/thunder_memory_summary_${REPORT_TIME}.html"
 
           echo "Generating memory report at: $REPORT_FILE"
-          VERSION="4.4.3"
-          python3 "${{ github.workspace }}/HelloPlugin/script/generate_memory_report.py" "$VERSION" > "$REPORT_FILE" 2>&1 || echo "Report generation failed!"
-
+          python3 "${{ github.workspace }}/HelloPlugin/script/generate_memory_report.py" > "$REPORT_FILE" 2>&1 || echo "Report generation failed!"
 
           # Kill Thunder after report
           sleep 2
@@ -141,4 +139,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Thunder-Memory-Report
-          path: artifacts/Thunder-4.4.3-Memory-Report.zip
+          path: artifacts/Thunder-Memory-Report.zip

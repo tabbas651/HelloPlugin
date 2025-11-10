@@ -7,7 +7,6 @@ else ()
     find_package(WPEFramework REQUIRED)
 endif (USE_THUNDER_R5)
 
-find_package(WPEFramework REQUIRED)
 find_package(${NAMESPACE}Core REQUIRED)
 find_package(${NAMESPACE}Plugins REQUIRED)
 

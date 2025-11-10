@@ -91,7 +91,7 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE="${{ env.TOOLCHAIN_FILE }}"
           -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/install/usr"
           -DCMAKE_MODULE_PATH="${{github.workspace}}/install/tools/cmake"
-          -DUSE_THUNDER_R5=ON
+          -DUSE_THUNDER_R5=1
           &&
           cmake --build build/HelloPlugin --target install -j8
 
@@ -101,7 +101,7 @@ jobs:
           echo "PATH=${{ github.workspace }}/install/usr/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=${{ github.workspace }}/install/usr/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-      - name: Run Thunder and test HelloPlugin
+      - name: Run Thunder and test HelloPlugin & generate Thunder Memory Report
         run: |
           # File to capture Thunder logs
           THUNDER_LOG="${{ github.workspace }}/thunder.log"
@@ -128,8 +128,7 @@ jobs:
           REPORT_FILE="$REPORT_DIR/thunder_memory_summary_${REPORT_TIME}.html"
 
           echo "Generating memory report at: $REPORT_FILE"
-          VERSION="5.2"
-          python3 "${{ github.workspace }}/HelloPlugin/script/generate_memory_report.py" "$VERSION" > "$REPORT_FILE" 2>&1 || echo "Report generation failed!"
+          python3 "${{ github.workspace }}/HelloPlugin/script/generate_memory_report.py" > "$REPORT_FILE" 2>&1 || echo "Report generation failed!"
 
           # Kill Thunder after report
           sleep 2
@@ -141,4 +140,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Thunder-Memory-Report
-          path: artifacts/Thunder-5.2-Memory-Report.zip
+          path: artifacts/Thunder-Memory-Report.zip

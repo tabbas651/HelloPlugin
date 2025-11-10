@@ -68,9 +68,6 @@ th {{ background-color: #2b3e50; color: white; }}
 
 def main():
 
-    # ✅ Get version or suffix from command line (default: 'default')
-    version = sys.argv[1] if len(sys.argv) > 1 else "default"
-
     processes = []
     result = subprocess.run(["pgrep", "-af", "Thunder"], capture_output=True, text=True)
     for line in result.stdout.strip().split("\n"):
@@ -98,7 +95,7 @@ def main():
 
 
     # ✅ Create versioned zip file
-    zip_path = f"artifacts/Thunder-{version}-Memory-Report.zip"
+    zip_path = f"artifacts/Thunder-Memory-Report.zip"
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
         zipf.write(output_file, arcname="thunder_memory_summary.html")
 
