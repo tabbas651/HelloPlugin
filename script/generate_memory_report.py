@@ -32,7 +32,8 @@ def get_memory_info(pid):
     return info
 
 def generate_html_report(process_data):
-    time_str = datetime.now().strftime("%a %b %d %H:%M:%S %Z %Y")
+    now = datetime.now()
+    time_str = f"Current date and time: {now}"
 
     html = f"""<html>
 <head>

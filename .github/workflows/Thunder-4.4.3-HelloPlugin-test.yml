@@ -126,32 +126,10 @@ jobs:
           # Kill Thunder after report
           sleep 2
           kill $THUNDER_PID || true
+          echo "✅ Report generated: $REPORT_FILE"
 
-          # Display the HTML report in GitHub Actions summary
-          if [ -f "artifacts/thunder_memory_summary.html" ]; then
-            echo "## Thunder Memory Report" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Generated on: $(date)" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            # Simple approach: show the HTML file exists and provide basic info
-            echo "### Memory Report Generated" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "✅ Thunder memory summary has been generated successfully." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "**File location:** \`artifacts/thunder_memory_summary.html\`" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-
-            # Extract some basic info without complex parsing
-            if grep -q "Thunder" "artifacts/thunder_memory_summary.html" 2>/dev/null; then
-              echo "**Status:** Thunder process memory data captured" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "**Status:** Report generated but no Thunder process found" >> $GITHUB_STEP_SUMMARY
-            fi
-
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "The detailed memory analysis is available in the generated HTML report." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Memory report generation failed" >> $GITHUB_STEP_SUMMARY
-          fi
-
+      - name: Upload timestamped memory report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Thunder-Memory-Report
+          path: artifacts/Thunder-Memory-Report.zip
