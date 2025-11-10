@@ -1,4 +1,4 @@
-name: Thunder-5.3-HelloPlugin-test
+name: Thunder-4.4.3-HelloPlugin-test
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:   # manual trigger
 
 env:
-  THUNDER_REF: "R5_3"
+  THUNDER_REF: "R4.4.3"
 
 jobs:
   HelloPlugin-test:
@@ -91,7 +91,6 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE="${{ env.TOOLCHAIN_FILE }}"
           -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/install/usr"
           -DCMAKE_MODULE_PATH="${{github.workspace}}/install/tools/cmake"
-          -DUSE_THUNDER_R5=ON
           &&
           cmake --build build/HelloPlugin --target install -j8
 
@@ -107,7 +106,7 @@ jobs:
           THUNDER_LOG="${{ github.workspace }}/thunder.log"
 
           # Start Thunder in the background
-          Thunder -c ${{ github.workspace }}/install/usr/etc/Thunder/config.json > "$THUNDER_LOG" 2>&1 &
+          WPEFramework -c ${{ github.workspace }}/install/etc/WPEFramework/config.json > "$THUNDER_LOG" 2>&1 &
           THUNDER_PID=$!
 
           # Wait for Thunder to initialize
@@ -128,8 +127,9 @@ jobs:
           REPORT_FILE="$REPORT_DIR/thunder_memory_summary_${REPORT_TIME}.html"
 
           echo "Generating memory report at: $REPORT_FILE"
-          VERSION="5.3"
+          VERSION="4.4.3"
           python3 "${{ github.workspace }}/HelloPlugin/script/generate_memory_report.py" "$VERSION" > "$REPORT_FILE" 2>&1 || echo "Report generation failed!"
+
 
           # Kill Thunder after report
           sleep 2
@@ -141,4 +141,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Thunder-Memory-Report
-          path: artifacts/Thunder-5.3-Memory-Report.zip
+          path: artifacts/Thunder-4.4.3-Memory-Report.zip

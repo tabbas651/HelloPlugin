@@ -4,11 +4,10 @@
 
 #include <core/core.h>
 #include <plugins/plugins.h>
-#include <thread>
 
 MODULE_NAME_DECLARATION("MyHelloPlugin")
 
-namespace Thunder
+namespace WPEFramework
 {
     namespace Plugin
     {
