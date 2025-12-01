@@ -18,15 +18,12 @@ Tested the HelloPlugin in different Thunder releases. Please find the testing re
 
 **PascalCase (SayHello)**
 
-Register(_T("SayHello"), &HelloPlugin::SayHello, this);
 **Request :** curl -X POST -H "Content-Type: application/json" 'http://127.0.0.1:9998/jsonrpc' -d '{"jsonrpc":"2.0","id":1,"method":"HelloPlugin.SayHello","params":{"name":"Thamim"}}' ; echo
 **Response :** {"error":{"code":-32601,"message":"Unknown method."}}
 
 Result:  — method not recognized.
 
 **camelCase (sayHello)**
-
-Register(_T("sayHello"), &HelloPlugin::sayHello, this);
 
 **Request :** curl -X POST -H "Content-Type: application/json" 'http://127.0.0.1:9998/jsonrpc' -d '{"jsonrpc":"2.0","id":1,"method":"HelloPlugin.sayHello","params":{"name":"Thamim"}}' ; echo
 **Response :** {"result":{"message":"Hello \"Thamim\" from TestPlugin"}} — works as expected
